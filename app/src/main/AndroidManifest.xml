@@ -14,8 +14,7 @@
         android:theme="@style/Theme.BasicComponents"
         tools:ignore="AllowBackup">
 
-        <activity android:name=".ui.dailyimage.MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".ui.dailyimage.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
