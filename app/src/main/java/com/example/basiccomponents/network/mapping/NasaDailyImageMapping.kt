@@ -6,7 +6,7 @@ import com.example.basiccomponents.ui.models.NasaDailyImage
 fun RemoteNasaDailyImage.toImageOfDay() = NasaDailyImage(
     copyright = copyright,
     date = date,
-    explanation = date,
+    explanation = explanation,
     hdImageUrl = hdImageUrl,
     mediaType = mediaType,
     title = title,
