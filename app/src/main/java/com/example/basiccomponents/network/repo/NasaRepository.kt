@@ -15,7 +15,6 @@ class NasaRepository(private val nasaApi: NasaApi) {
         val stringDate =  with(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) {
             date?.let { format(date) }
         }
-
         return nasaApi.getDaily(stringDate, apiKey).toImageOfDay()
     }
 }
