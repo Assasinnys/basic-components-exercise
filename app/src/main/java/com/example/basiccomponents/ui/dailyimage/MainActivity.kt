@@ -2,6 +2,7 @@ package com.example.basiccomponents.ui.dailyimage
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,7 +21,9 @@ import com.example.basiccomponents.ui.models.NasaDailyImage
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvExplanation: TextView
     private var menu: Menu? = null
 
+    private var dates: List<Date> = DateUtils.loadDates(4)
+    private var date: Date? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,14 +50,16 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate")
         setContentView(R.layout.main_activity)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        //supportActionBar?.setDisplayShowTitleEnabled(false);
+
 
         nasaImage = findViewById(R.id.iv_photo)
         tvExplanation = findViewById(R.id.tv_explanation)
+        tvExplanation.movementMethod = ScrollingMovementMethod()
+
         btLoad = findViewById(R.id.bt_load_photo)
         btLoad.setOnClickListener {
             Toast.makeText(this, getString(R.string.load), Toast.LENGTH_SHORT).show()
-            fetchDailyImage()
+            fetchDailyImage(date)
         }
     }
 
@@ -81,6 +88,15 @@ class MainActivity : AppCompatActivity() {
             menu?.findItem(R.id.action_change_theme)?.setIcon(R.drawable.outline_nightlight_black_48)
         }
 
+        dates.let{
+            var title = DateUtils.toSimpleString(it[1])
+            menu?.findItem(R.id.action_date_3)?.title = title
+            title = DateUtils.toSimpleString(it[2])
+            menu?.findItem(R.id.action_date_2)?.title = title
+            title = DateUtils.toSimpleString(it[3])
+            menu?.findItem(R.id.action_date_1)?.title = title
+        }
+
         this.menu = menu
         return true
     }
@@ -90,6 +106,25 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_change_theme -> {
                 changeTheme()
+                true
+            }
+            R.id.action_date_today ->
+            {
+                date = dates[0]
+                true
+            }
+            R.id.action_date_3 ->
+            {
+                date = dates[1]
+                true
+            }
+            R.id.action_date_2 ->{
+                date = dates[2]
+                true
+            }
+            R.id.action_date_1 ->
+            {
+                date = dates[3]
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -124,6 +159,30 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private class DateUtils {
+        companion object {
+            fun loadDates(count: Int): List<Date>{
+                val result = ArrayList<Date>()
+                for (i in 0 until count){
+                    val date = dateBeforeToday(i)
+                    result.add(date!!)
+                }
+                return result
+            }
+
+            private fun dateBeforeToday(shift: Int): Date? {
+                val c = Calendar.getInstance()
+                c.time = Date()
+                c.add(Calendar.DATE, -shift)
+                return c.time
+            }
+
+            fun toSimpleString(date: Date) : String {
+                val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                return format.format(date)
+            }
+        }
+    }
 
     /**
      * Don't edit this function. Use only for fetching data.
