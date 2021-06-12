@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Basic Components</string>
+    <string name="ok">Ok</string>
+    <string name="network_error">Network error</string>
+    <string name="load_photo">Load photo</string>
+    <string name="light_mode">Light mode</string>
+    <string name="load">Load</string>
+    <string name="title">title</string>
+    <string name="today">Today</string>
 </resources>
