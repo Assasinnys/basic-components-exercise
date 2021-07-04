@@ -4,17 +4,17 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primaryLightVariantColor</item>
         <item name="colorPrimaryVariant">@color/primaryLightColor</item>
-        <item name="colorOnPrimary">@color/primaryTextColor</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryLightColor</item>
         <item name="colorSecondaryVariant">@color/secondaryColor</item>
-        <item name="colorOnSecondary">@color/secondaryTextColor</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="iv_cast_corners">
-        <item name="cornerSize">2%</item>
+        <item name="cornerSize">4dp</item>
     </style>
 </resources>

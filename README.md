@@ -24,7 +24,3 @@
 P.S.: Остальные детали найдёшь уже в коде. Экран для работы - MainActivity
 
 P.P.S.: Это упражнение. Баллы за него начислятся НЕ будут.
-
-## Скриншоты экранов:
-
-<img src="https://github.com/Aliibnabdul/basic-components-exercise/blob/master/ScreenShots/Screenshot_1623334617.png" alt="Screenshot_1623334617.png" width="256"/>    <img src="https://github.com/Aliibnabdul/basic-components-exercise/blob/master/ScreenShots/Screenshot_1623334648.png" alt="Screenshot_1623334648.png" width="256"/>
