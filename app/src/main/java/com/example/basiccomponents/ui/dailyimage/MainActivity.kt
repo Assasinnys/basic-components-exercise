@@ -49,12 +49,10 @@ class MainActivity : AppCompatActivity() {
         showNetworkError(false)
 
         with(binding) {
-
             toolbar.subtitle = data.title
 
             Glide.with(ivNasaImage)
                 .load(data.imageUrl)
-
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -75,9 +73,7 @@ class MainActivity : AppCompatActivity() {
                         showLoading(false)
                         return false
                     }
-
                 })
-
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(ivNasaImage)
 
@@ -87,17 +83,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showNetworkError(b: Boolean) {
-        with(binding) {
-            if (avNetworkLost.isVisible != b) {
+        with(binding.avNetworkLost) {
+            if (isVisible != b) {
                 if (b) {
-                    avNetworkLost.isVisible = b
-                    avNetworkLost.playAnimation()
+                    isVisible = b
+                    playAnimation()
                 }
-
-                avNetworkLost.alphaFade(b)
+                alphaFade(b)
                 if (!b) {
-                    avNetworkLost.cancelAnimation()
-                    avNetworkLost.isVisible = b
+                    cancelAnimation()
+                    isVisible = b
                 }
             }
         }
@@ -107,11 +102,15 @@ class MainActivity : AppCompatActivity() {
         with(binding) {
             if (b) {
                 contentLayout.alphaFade(!b)
-                avLoading.alphaFade(b)
-                avLoading.playAnimation()
+                avLoading.apply {
+                    alphaFade(b)
+                    playAnimation()
+                }
             } else {
-                avLoading.alphaFade(b)
-                avLoading.cancelAnimation()
+                avLoading.apply {
+                    alphaFade(b)
+                    cancelAnimation()
+                }
                 contentLayout.alphaFade(!b)
             }
         }
@@ -120,24 +119,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun pickDate() {
         val currentDateTime = Calendar.getInstance()
-        val currentYear = currentDateTime.get(Calendar.YEAR)
-        val currentMonth = currentDateTime.get(Calendar.MONTH)
-        val currentDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(
+        DatePickerDialog(
             this,
             { _, year, month, day ->
-                val newDate = Calendar.getInstance()
-                newDate.set(year, month, day)
-                val newDateInMillis = newDate.timeInMillis
-                fetchDailyImage(Date(newDateInMillis))
+                val newDate = Calendar.getInstance().apply {
+                    set(year, month, day)
+                }
+                fetchDailyImage(Date(newDate.timeInMillis))
             },
-            currentYear,
-            currentMonth,
-            currentDay
-        )
-        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
-        datePickerDialog.show()
+            currentDateTime.get(Calendar.YEAR),
+            currentDateTime.get(Calendar.MONTH),
+            currentDateTime.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            datePicker.maxDate = System.currentTimeMillis()
+            show()
+        }
     }
 
     private fun handleError(t: Throwable) {
