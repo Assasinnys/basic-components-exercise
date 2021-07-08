@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-//        fetchDailyImage()
     }
 
     private fun initViews(data: NasaDailyImage) {
@@ -82,36 +81,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showNetworkError(b: Boolean) {
+    private fun showNetworkError(showError: Boolean) {
         with(binding.avNetworkLost) {
-            if (isVisible != b) {
-                if (b) {
-                    isVisible = b
+            if (isVisible != showError) {
+                if (showError) {
+                    isVisible = showError
                     playAnimation()
                 }
-                alphaFade(b)
-                if (!b) {
+                alphaFade(showError)
+                if (!showError) {
                     cancelAnimation()
-                    isVisible = b
+                    isVisible = showError
                 }
             }
         }
     }
 
-    private fun showLoading(b: Boolean) {
+    private fun showLoading(showLoading: Boolean) {
         with(binding) {
-            if (b) {
-                contentLayout.alphaFade(!b)
+            if (showLoading) {
+                contentLayout.alphaFade(!showLoading)
                 avLoading.apply {
-                    alphaFade(b)
+                    alphaFade(showLoading)
                     playAnimation()
                 }
             } else {
                 avLoading.apply {
-                    alphaFade(b)
+                    alphaFade(showLoading)
                     cancelAnimation()
                 }
-                contentLayout.alphaFade(!b)
+                contentLayout.alphaFade(!showLoading)
             }
         }
 
@@ -137,9 +136,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleError(t: Throwable) {
-        Log.e(MainActivity::class.java.simpleName, "exception! CurrentThread: ${Thread.currentThread().name}", t)
-        //TODO: handle request's errors here
+    private fun handleError(throwable: Throwable) {
+        Log.e(MainActivity::class.java.simpleName, "exception! CurrentThread: ${Thread.currentThread().name}", throwable)
         runOnUiThread {
             showLoading(false)
             showNetworkError(true)

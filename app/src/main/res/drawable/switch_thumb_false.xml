@@ -8,10 +8,9 @@
                 android:width="24dp"/>
             <stroke
                 android:width="2dp"
-                android:color="@color/secondaryDarkColor"
+                android:color="?colorControlNormal"
                 />
         </shape>
-
     </item>
 
     <item
