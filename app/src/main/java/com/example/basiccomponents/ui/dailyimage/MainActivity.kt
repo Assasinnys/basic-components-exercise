@@ -81,36 +81,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showNetworkError(showError: Boolean) {
+    private fun showNetworkError(isError: Boolean) {
         with(binding.avNetworkLost) {
-            if (isVisible != showError) {
-                if (showError) {
-                    isVisible = showError
+            if (isVisible != isError) {
+                if (isError) {
+                    isVisible = isError
                     playAnimation()
                 }
-                alphaFade(showError)
-                if (!showError) {
+                alphaFade(isError)
+                if (!isError) {
                     cancelAnimation()
-                    isVisible = showError
+                    isVisible = isError
                 }
             }
         }
     }
 
-    private fun showLoading(showLoading: Boolean) {
+    private fun showLoading(isLoading: Boolean) {
         with(binding) {
-            if (showLoading) {
-                contentLayout.alphaFade(!showLoading)
+            if (isLoading) {
+                contentLayout.alphaFade(!isLoading)
                 avLoading.apply {
-                    alphaFade(showLoading)
+                    alphaFade(isLoading)
                     playAnimation()
                 }
             } else {
                 avLoading.apply {
-                    alphaFade(showLoading)
+                    alphaFade(isLoading)
                     cancelAnimation()
                 }
-                contentLayout.alphaFade(!showLoading)
+                contentLayout.alphaFade(!isLoading)
             }
         }
 
