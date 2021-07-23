@@ -1,19 +1,23 @@
 package com.example.basiccomponents.ui.dailyimage
 
+import android.animation.ValueAnimator
 import android.app.DatePickerDialog
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.ProxyFileDescriptorCallback
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.basiccomponents.R
@@ -36,6 +40,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private var errorValueAnimator: ValueAnimator? = null
+    private var contentValueAnimator: ValueAnimator? = null
+    private var loadingValueAnimator: ValueAnimator? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,8 +53,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews(data: NasaDailyImage) {
-        showNetworkError(false)
-
         with(binding) {
             toolbar.subtitle = data.title
 
@@ -70,10 +76,12 @@ class MainActivity : AppCompatActivity() {
                         isFirstResource: Boolean
                     ): Boolean {
                         showLoading(false)
+                        showContent(true)
                         return false
                     }
                 })
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(DrawableTransitionOptions.withCrossFade(1000))
                 .into(ivNasaImage)
 
             tvDate.text = data.date
@@ -88,7 +96,8 @@ class MainActivity : AppCompatActivity() {
                     isVisible = isError
                     playAnimation()
                 }
-                alphaFade(isError)
+                errorValueAnimator?.cancel()
+                errorValueAnimator = alphaFade(isError)
                 if (!isError) {
                     cancelAnimation()
                     isVisible = isError
@@ -98,22 +107,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
+        loadingValueAnimator?.cancel()
         with(binding) {
             if (isLoading) {
-                contentLayout.alphaFade(!isLoading)
                 avLoading.apply {
-                    alphaFade(isLoading)
                     playAnimation()
+                    loadingValueAnimator = alphaFade(isLoading)
                 }
             } else {
                 avLoading.apply {
-                    alphaFade(isLoading)
-                    cancelAnimation()
+                    loadingValueAnimator = alphaFade(isLoading)
+                    loadingValueAnimator?.doOnEnd {
+                        cancelAnimation()
+                    }
                 }
-                contentLayout.alphaFade(!isLoading)
             }
         }
+    }
 
+    private fun showContent(isShowContent: Boolean) {
+        contentValueAnimator?.cancel()
+        contentValueAnimator = binding.contentLayout.alphaFade(isShowContent)
     }
 
     private fun pickDate() {
@@ -137,10 +151,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleError(throwable: Throwable) {
+        Log.e("MainActivity_TAG", "handleError()")
+
         Log.e(MainActivity::class.java.simpleName, "exception! CurrentThread: ${Thread.currentThread().name}", throwable)
         runOnUiThread {
-            showLoading(false)
             showNetworkError(true)
+            showLoading(false)
+            showContent(true)
         }
     }
 
@@ -179,6 +196,10 @@ class MainActivity : AppCompatActivity() {
      * Don't edit this function. Use only for fetching data.
      */
     private fun fetchDailyImage(date: Date? = null) {
+
+        showNetworkError(false)
+
+        showContent(false)
         showLoading(true)
         if (!coroutineScope.isActive) coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -208,5 +229,11 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         coroutineScope.cancel()
+        loadingValueAnimator?.cancel()
+        loadingValueAnimator = null
+        errorValueAnimator?.cancel()
+        errorValueAnimator = null
+        contentValueAnimator?.cancel()
+        contentValueAnimator = null
     }
 }

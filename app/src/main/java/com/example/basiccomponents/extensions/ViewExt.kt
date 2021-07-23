@@ -6,8 +6,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 
-fun View.alphaFade(b: Boolean) {
-    val start = if (b) 0F else 1F
+fun View.alphaFade(b: Boolean): ValueAnimator? {
+    val start = this.alpha
     val end = if (b) 1F else 0F
     if (this.alpha != end){
         val valueAnimator = ValueAnimator.ofFloat(start, end)
@@ -19,5 +19,7 @@ fun View.alphaFade(b: Boolean) {
             duration = 500L
             start()
         }
+        return valueAnimator
     }
+    return null
 }

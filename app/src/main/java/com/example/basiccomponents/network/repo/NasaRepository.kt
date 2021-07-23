@@ -10,7 +10,7 @@ class NasaRepository(private val nasaApi: NasaApi) {
 
     suspend fun getDailyImage(
         date: Date? = null,
-        apiKey: String = "DEMO_KEY"
+        apiKey: String = "ewbjI6eqJOc23Xe6xONoDPbEJdcOvvBomZEJhgs5"
     ): NasaDailyImage {
         val stringDate =  with(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())) {
             date?.let { format(date) }
