@@ -2,13 +2,10 @@ package com.example.basiccomponents.extensions
 
 import android.animation.ValueAnimator
 import android.view.View
-import androidx.activity.OnBackPressedCallback
-import androidx.core.animation.doOnEnd
-import androidx.core.view.isVisible
 
-fun View.alphaFade(b: Boolean): ValueAnimator? {
+fun View.alphaFade(show: Boolean): ValueAnimator? {
     val start = this.alpha
-    val end = if (b) 1F else 0F
+    val end = if (show) 1F else 0F
     if (this.alpha != end){
         val valueAnimator = ValueAnimator.ofFloat(start, end)
         valueAnimator.addUpdateListener {
