@@ -3,9 +3,9 @@ package com.example.basiccomponents.extensions
 import android.animation.ValueAnimator
 import android.view.View
 
-fun View.alphaFade(show: Boolean): ValueAnimator? {
+fun View.alphaFade(isShowing: Boolean): ValueAnimator? {
     val start = this.alpha
-    val end = if (show) 1F else 0F
+    val end = if (isShowing) 1F else 0F
     if (this.alpha != end){
         val valueAnimator = ValueAnimator.ofFloat(start, end)
         valueAnimator.addUpdateListener {
